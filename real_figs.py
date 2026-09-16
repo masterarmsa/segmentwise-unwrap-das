@@ -7,7 +7,7 @@ SNR 用论文旧口径 snr_db(curve)（与 fig18-22 一致）。
 数据格式（lunwen10.py / compare_real_vs_sim.py 确认）：
   .bin = int16，I/Q 交错：I=DATA[::2], Q=DATA[1::2]
   相位 = arctan2(Q, I)；FL=16384 空间点/帧；REP=6000 帧/秒
-  FC=500(前端截除), AL=16000(7km光纤), num_regions=32
+  FC=500(前端截除), AL=16000(遮罩末端；实际光纤末端≈15699，约6.4 km), num_regions=32
 """
 import os, importlib.util, sys
 import numpy as np
@@ -29,11 +29,11 @@ import multi_offset as MO   # 多偏移网格平均（方法升级 B，K=8 默�
 FL = 16384            # 每帧空间点数
 REP = 6000            # 脉冲重复频率（帧/秒）
 FC = 500              # 前端截取索引
-AL = 16000            # 实际光纤长度索引（7km）
+AL = 16000            # 遮罩末端索引（实际光纤末端≈15699，约 6.4 km）
 TW = 100              # 截断过渡带
 IQW = 4               # Savgol 窗宽
-IQP = 5               # Savgol 阶数
-NUM_REGIONS = 32      # 分段数（proposed 默认）
+IQP = 5               # Savgol 阶数（min(p, w-1) 截断后实际为 3）
+NUM_REGIONS = 32      # 分段数（本脚本出图用；论文推荐区间 8–128）
 OVL = 0.01            # 重叠比例
 
 OUT = r'C:\Users\gzc\Desktop\8\reviewer2_v14_real'
