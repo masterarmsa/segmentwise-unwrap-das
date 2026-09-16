@@ -60,10 +60,17 @@ The scripts read raw I/Q recordings as **interleaved int16**:
 - one file = a sequence of frames, frame length **FL = 16384** spatial samples;
 - each spatial sample is one **I** followed by one **Q** sample, int16, normalised by 32767;
 - the acquisition frame rate (pulse repetition rate) is **REP = 6000** frames/s;
-- spatial sampling interval ≈ **0.41 m** per sample (used in `m2_gauge_t6.py` as `G * 0.41`);
-- front-end cut index **FC = 500** and fibre end index **AL = 16000** samples.
+- spatial sampling interval ≈ **0.41 m** per sample (250 MSa/s; used in `m2_gauge_t6.py` as `G * 0.41`);
+  the system spatial resolution is `ΔzR` = **10 m** (100 ns probe pulse);
+- front-end cut index **FC = 500** and rear mask index **AL = 16000**: `apply_mask()` tapers out the
+  samples below `FC` and at or beyond `AL`. The sensing fibre itself occupies **samples 0–15,699**,
+  i.e. about **6.4 km** at 0.41 m per sample — the same range as in the manuscript;
+- I/Q pre-filter: `apply_savgol_filter(x, IQW, IQP)` with **IQW = 4**, **IQP = 5**; the helper
+  evaluates `savgol_filter(x, w, min(p, w - 1))`, so the effective polynomial order is **3**,
+  i.e. the four-sample, third-order Savitzky–Golay filter quoted in the manuscript.
 
-The event channel used in the manuscript is index **12543** (far end).
+Channel indices are **raw, absolute** frame indices and are not re-numbered by the mask: the event
+channel of the manuscript is index **12543** (far end, ≈ 5.1 km).
 
 Python snippet used throughout to build a phase matrix `P` of shape `(n_frames, FL)`:
 
