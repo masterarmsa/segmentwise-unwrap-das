@@ -124,5 +124,5 @@ MIT — see `LICENSE`.
 
 ## 8. Citation
 
-If you use this code, please cite the manuscript above. If you cite the code package itself,
-use its archived DOI (Zenodo).
+If you use this code, please cite the manuscript above. The code package is distributed from
+this repository: <https://github.com/masterarmsa/segmentwise-unwrap-das>.
